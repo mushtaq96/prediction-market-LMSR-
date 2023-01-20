@@ -1,10 +1,15 @@
-<!-- templates/index.html -->
 <html>
   <head>
     <title>Prediction Market</title>
   </head>
   <body>
     <h1>Prediction Markets</h1>
+    {% if funds %}
+    <h3>Total Market  Fund : {{ funds }}</h3><p>(reload for current value)</p>
+    {% endif %}
+    <h3>
+      Market Maker Fee : 0.01 Euros
+    </h3>
     <form method="post" action="{{url_for('make_trade')}}">
       <label for="outcome">Outcome:</label>
       <select id="outcome" name="outcome">

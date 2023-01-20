@@ -8,8 +8,22 @@ market.create_market("Trump will be re-elected")
 
 
 @app.route("/")
+def index():
+    return render_template("index.html", outcomes=market.outcomes, funds=market.funds)
+
+
+@app.route("/make_trade", methods=["POST"])
 def make_trade():
-    return render_template("index.html", outcomes=market.outcomes)
+    outcome = request.form['outcome']
+    shares = int(request.form['shares'])
+    user_funds = int(request.form['funds'])
+    trade_type = request.form['trade_type']
+    if trade_type == 'buy':
+        cost = market.buy_shares(outcome, shares, user_funds)
+        return render_template('buy.html', outcome=outcome, shares=shares, cost=cost, fund=market.funds)
+    elif trade_type == 'sell':
+        revenue = market.sell_shares(outcome, shares, user_funds)
+        return render_template('sell.html', outcome=outcome, shares=shares, revenue=revenue, fund=market.funds)
 
 
 @app.route("/buy", methods=["POST"])
@@ -19,7 +33,8 @@ def buy():
     user_funds = float(request.form["funds"])
     try:
         cost = market.buy_shares(outcome, shares, user_funds)
-        return "Successfully purchased {} shares for ${:.2f}".format(shares, cost)
+        print("Successfully purchased {} shares for ${:.2f}".format(shares, cost))
+        return render_template('buy.html', outcome=outcome, shares=shares, cost=cost)
     except ValueError as e:
         return str(e)
 
@@ -31,7 +46,8 @@ def sell():
     user_funds = float(request.form["funds"])
     try:
         revenue = market.sell_shares(outcome, shares, user_funds)
-        return "Successfully sold {} shares for ${:.2f}".format(shares, revenue)
+        print("Successfully sold {} shares for ${:.2f}".format(shares, revenue))
+        return render_template('sell.html', outcome=outcome, shares=shares, revenue=revenue)
     except ValueError as e:
         return str(e)
 
