@@ -1,0 +1,38 @@
+<!-- templates/index.html -->
+<html>
+  <head>
+    <title>Prediction Market</title>
+  </head>
+  <body>
+    <h1>Prediction Markets</h1>
+    <form method="post" action="{{url_for('make_trade')}}">
+      <label for="outcome">Outcome:</label>
+      <select id="outcome" name="outcome">
+        {% for outcome in outcomes %}
+        <option value="{{outcome}}">{{outcome}}</option>
+        {% endfor %}
+      </select>
+      <br />
+      <br />
+      <label for="shares">Shares:</label>
+      <input type="number" id="shares" name="shares" />
+      <br />
+      <br />
+      <label for="trade_type">Trade Type:</label>
+      <select id="trade_type" name="trade_type">
+        <option value="buy">Buy</option>
+        <option value="sell">Sell</option>
+      </select>
+      <br />
+      <br />
+      <label for="funds">Funds:</label>
+      <input type="number" id="funds" name="funds" />
+      <br />
+      <br />
+      <input type="submit" value="Submit" />
+    </form>
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
+  </body>
+</html>
